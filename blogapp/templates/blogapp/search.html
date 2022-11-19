@@ -1,0 +1,85 @@
+{% extends "blogapp/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container">
+      <div class="row">
+  {% if xss %}
+
+    {% autoescape off %}
+
+      {% if  query %}
+      <div class="d-flex">
+        <div class="col-11">
+           <p class="lead">search for <strong>{{query}}</strong></p><br>
+        </div>
+      </div>
+
+      {% endif %}
+       <div class="col-12">
+      {% if result %}
+
+        {% for x in result %}
+
+          <a href="{{x.get_url}}"><h2>{{x.title}}</h2></a>
+          <p>{{x.admin_content|truncatewords:50}}</p>
+		      <img src="{{ x.images.url }}" with="150" height="150">
+            <br><hr>
+
+        {% endfor %}
+      {% else %}
+
+        <script>
+		function trackSearch(quer){
+		    document.write("<p>Not Found: "+query+"</p>" );
+		}
+	        var query = (new URLSearchParams(window.location.search)).get('search');
+	            if(query){
+		        trackSearch(query)
+		    }
+        </script>
+      {% endif %}
+     </div>
+    {% endautoescape %}
+
+  {% else %}
+
+    {% if  query and tag%}
+      <div class=col-12><p class="lead">Search for: <strong>{{query}}  </strong>and Tag: <strong>{{tag}}</strong></p></div>
+    {% else %}
+      {%if query%}
+    <div class=col-12><p class="lead">Search for: <strong>{{query}}</strong></p></div>
+      {%endif%}
+       {%if tag%}
+    <div class=col-12><p class="lead">Search for tag: <strong>{{tag}}</strong></p></div>
+      {%endif%}
+    {% endif %}
+    <div class="col-12">
+    {% if result %}
+
+      {% for x in result %}
+
+        <a href="{{x.get_url}}"><h2>{{x.title}}</h2></a>
+        <p>{{x.admin_content|truncatewords:50}}</p>
+		    <img src="{{ x.images.url }}" with="150" height="150">
+            <br><hr>
+      {% endfor %}
+
+    {% else %}
+    {% if  query and tag%}
+      <p class='lead'> No Post available with keyword: <strong>{{query}}</strong> and tag: <strong>{{tag}}</strong></p>
+    {% else %}
+      {%if query%}
+    <p class='lead'>No Post available with keyword: <strong>{{query}}</strong></p>
+      {%endif%}
+       {%if tag%}
+    <p class='lead'>No Post available with tag: <strong>{{tag}}</strong></p>
+      {%endif%}
+    {% endif %}
+         
+    {% endif %}
+    </div>
+  {% endif %}
+      </div>
+    </div>
+{% endblock %}
+

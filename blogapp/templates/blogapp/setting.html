@@ -1,0 +1,70 @@
+{% extends "blogapp/base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="d-flex flex-column">
+    {% if result %} {% for x in result %}
+    <a href="{{x.get_url}}"><h2>{{x.title}}</h2></a>
+    <p>{{x.admin_content|truncatewords:50}}</p>
+    <img src="{{ x.images.url }}" with="150" height="150" />
+    <br />
+    <hr />
+      {% endfor %} 
+    {% endif %}
+    <div class="d-flex">
+      <div class="col-11">
+        <h2 class="text-center">Setting Vulnerability</h2>
+        {% if msg %}
+          {% if msg == "You don't have permission!" %}
+            <script>alert('Only admin can perform this action')</script></script>
+            <h2 class="text-center" style="color: red;">{{ msg }}</h2>
+          {% else %}
+            <h2 class="text-center" style="color: red;">{{ msg }}</h2>
+          {% endif %}
+          {% endif %}
+        <br />
+      </div>
+    </div>
+     <div class="col-2"><p class="text-center font-italic">Hi, {{user}}</p></p></div>
+      <div class="d-flex">
+        <form action="{%url 'setting' %}" method="POST">
+          <div class="form-group col-12">
+            <div class="row">
+              {%csrf_token %} 
+                {% for item in object_list %}
+              <div class="input-group mb-3 col-4">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01"
+                    >{{ item.name }}</label
+                  >
+                </div>
+                <select name="{{item.name}}" class="custom-select text-center">
+                  {% if item.status %}
+                  <option value="yes" selected>Yes</option>
+                  <option value="no">No</option>
+                  {% else %}
+                  <option value="yes">Yes</option>
+                  <option value="no" selected>No</option>
+                  {% endif %}
+                </select>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+           {% if not msg %}
+          <div class="form-group col-12">
+            <input class="btn btn-primary" type="submit" value="Submit" />
+          {% endif %} 
+          </div>
+         <div>  {%if msg%}
+                {% if not user.is_authenticated %}
+                <p><a href="{% url 'user_login' %}?next={{request.path}}" > <button class="btn btn-primary" type="button">Log in</button></a></p>
+                {%else%}
+                <input class="btn btn-primary" type="submit" value="Submit" />      
+                {% endif %}
+                {% endif %}
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
