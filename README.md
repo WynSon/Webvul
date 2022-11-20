@@ -14,7 +14,7 @@ Demo data is available in the source. To running and check it. Please follow ste
 Clone the source
 
 ``` 
-git clone https://github.com/pentestThucchienTeam/blog-vul.git
+git clone https://github.com/n3utr1n00/Webvul.git
 
 ```
 
